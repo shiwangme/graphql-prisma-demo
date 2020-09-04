@@ -1,41 +1,48 @@
-import { PrismaClient } from '@prisma/client';
-// or const { PrismaClient } = require('@prisma/client')
+import { GraphQLServer } from 'graphql-yoga';
+import { schema } from './schema';
+import { createContext } from './context';
 
-const prisma = new PrismaClient();
+new GraphQLServer({ schema, context: createContext }).start(() =>
+  console.log(`🚀 Server ready at: http://localhost:4000\n⭐️ See sample queries: http://pris.ly/e/ts/graphql#using-the-graphql-api`)
+);
+// import { PrismaClient } from '@prisma/client';
+// // or const { PrismaClient } = require('@prisma/client')
 
-async function main() {
-  await prisma.user.create({
-    data: {
-      name: 'Alice',
+// const prisma = new PrismaClient();
 
-      email: 'alice@prisma.io',
+// async function main() {
+//   await prisma.user.create({
+//     data: {
+//       name: 'Alice',
 
-      posts: {
-        create: { title: 'Hello World' }
-      },
+//       email: 'alice@prisma.io',
 
-      profile: {
-        create: { bio: 'I like turtles' }
-      }
-    }
-  });
+//       posts: {
+//         create: { title: 'Hello World' }
+//       },
 
-  const allUsers = await prisma.user.findMany({
-    include: {
-      posts: true,
+//       profile: {
+//         create: { bio: 'I like turtles' }
+//       }
+//     }
+//   });
 
-      profile: true
-    }
-  });
+//   const allUsers = await prisma.user.findMany({
+//     include: {
+//       posts: true,
 
-  console.dir(allUsers, { depth: null });
-}
+//       profile: true
+//     }
+//   });
 
-main()
-  .catch((e) => {
-    throw e;
-  })
+//   console.dir(allUsers, { depth: null });
+// }
 
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// main()
+//   .catch((e) => {
+//     throw e;
+//   })
+
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
